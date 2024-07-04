@@ -19,17 +19,16 @@ def run_service(
 ):
     delivery_addresses_flattened = [item for sublist in delivery_addresses for item in sublist]
     address_distances = maps_service.get_address_distances(delivery_addresses_flattened)
-    routes_list = route_planning_service.plan_routes(number_couriers, address_distances, delivery_addresses_flattened)
+    routes = route_planning_service.plan_routes(number_couriers, address_distances, delivery_addresses_flattened)
 
     result = ""
-    for route in routes_list:
-        nodes = eval(route["route_nodes"])
-        result += f"{route['cluster_id']}: {nodes}"
-        result += "\n"
 
-    plt = graph_service.create_graph(address_distances, routes_list)
+    for i, route in enumerate(routes):
+        result += f"Courier {i+1}: {route}\n"
 
-    return result, plt
+    ##plt = graph_service.create_graph(address_distances, routes_list)
+
+    return result
 
 
 demo = gr.Interface(
@@ -51,7 +50,6 @@ demo = gr.Interface(
     ],
     [
         gr.Textbox(label="Courier Routes"),
-        gr.Plot(label="Courier Route Graph"),
     ],
     examples=[
         [

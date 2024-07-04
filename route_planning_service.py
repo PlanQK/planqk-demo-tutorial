@@ -42,7 +42,14 @@ def plan_routes(
     job = client.start_execution(data=data, params=params)
     job_result = client.get_result(job.id)
 
-    return job_result["result"]["routes_list"]
+    routes = []
+    ## convert the address number identifier back to the address
+    for route in job_result["result"]["routes_list"]:
+        route_nodes = route["route_nodes"]
+        ## search the identifier in address_id it is the value
+        route_nodes = [addresses[item] for item in eval(route_nodes)]
+        routes.append(route_nodes)
 
+    return routes
 
 
