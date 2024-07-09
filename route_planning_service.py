@@ -1,5 +1,4 @@
 import os
-import typing
 from planqk.service.client import PlanqkServiceClient
 
 consumer_key = os.getenv("CONSUMER_KEY", None)

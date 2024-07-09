@@ -1,8 +1,7 @@
-import typing
 import gradio as gr
-import graph_service
-import maps_service
+import google_maps_service
 import route_planning_service
+import map_creator
 
 title = "Demo: Quantum Route Planning"
 description = """
@@ -14,20 +13,22 @@ description = """
     """
 
 
-def run_service(
-        number_couriers: int, delivery_addresses: list[str]
-):
+def run_service(number_couriers: int, delivery_addresses: list[str]):
     delivery_addresses_flattened = [item for sublist in delivery_addresses for item in sublist]
-    address_distances = maps_service.get_address_distances(delivery_addresses_flattened)
+
+    address_distances, address_coordinates = google_maps_service.get_address_distances_and_coordinates(delivery_addresses_flattened)
     routes = route_planning_service.plan_routes(number_couriers, address_distances, delivery_addresses_flattened)
+    map = map_creator.create_map(routes, address_coordinates)
 
+    result_for_textbox = format_result_for_textbox_output(routes)
+
+    return result_for_textbox, map
+
+
+def format_result_for_textbox_output(routes):
     result = ""
-
     for i, route in enumerate(routes):
-        result += f"Courier {i+1}: {route}\n"
-
-    ##plt = graph_service.create_graph(address_distances, routes_list)
-
+        result += f"Courier {i + 1}: {route}\n"
     return result
 
 
@@ -50,6 +51,7 @@ demo = gr.Interface(
     ],
     [
         gr.Textbox(label="Courier Routes"),
+        gr.Plot()
     ],
     examples=[
         [
