@@ -5,21 +5,24 @@ import map_creator
 
 title = "Demo: Quantum Route Planning"
 description = """
-    This interactive demo uses the [Fleet Route Planning Service](https://platform.planqk.de/marketplace/apis/8c63c4ed-97cb-4496-a27d-cfc7330fd66c),to plan routes for several couriers in the Berlin district of Pankow. 
+    This interactive demo uses the [Fleet Route Planning Service](https://platform.planqk.de/marketplace/apis/8c63c4ed-97cb-4496-a27d-cfc7330fd66c), to plan delivery routes for a given number of couriers in the Berlin district of Pankow. 
     The routes are optimized to minimize the total distance traveled by the couriers while ensuring that each delivery address is visited exactly once.
     You can adjust the number of couriers and the delivery addresses to see how the routes change.
     """
 
-def run_service(number_couriers: int, delivery_addresses: list[str]):
-    delivery_addresses_flattened = [item for sublist in delivery_addresses for item in sublist]
 
-    address_distances, address_coordinates = google_maps_service.get_address_distances_and_coordinates(delivery_addresses_flattened)
-    routes = route_planning_service.plan_routes(number_couriers, address_distances, delivery_addresses_flattened)
+def run_service(number_couriers: int, delivery_addresses: list[str]):
+    address_distances, address_coordinates = google_maps_service.get_address_distances_and_coordinates(delivery_addresses)
+    routes = route_planning_service.plan_routes(number_couriers, address_distances, delivery_addresses)
     map = map_creator.create_map(routes, address_coordinates)
 
     result_for_textbox = format_result_for_textbox_output(routes)
 
-    return result_for_textbox, map
+    return map, result_for_textbox
+
+
+def init_empty_map():
+    return map_creator.create_map([], {})
 
 
 def format_result_for_textbox_output(routes):
@@ -29,49 +32,49 @@ def format_result_for_textbox_output(routes):
     return result
 
 
+address_choices = [
+    "Schliemannstraße 34, 10437 Berlin",
+    "Kastanienallee 82, 10435 Berlin",
+    "Helmholtzplatz 1, 10437 Berlin",
+    "Danziger Straße 136, 10407 Berlin",
+    "Kollwitzstraße 1, 10405 Berlin",
+    "Schönhauser Allee 6-7, 10119 Berlin",
+    "Knaackstraße 97, 10435 Berlin",
+    "Sredzkistraße 44, 10435 Berlin",
+    "Stargarder Straße 73, 10437 Berlin",
+    "Oderberger Straße 56, 10435 Berlin",
+    "Kopenhagener Straße 71, 10437 Berlin",
+    "Pappelallee 29, 10437 Berlin",
+    "Winsstraße 65, 10405 Berlin",
+    "Dunckerstraße 14, 10437 Berlin",
+    "Senefelderstraße 22, 10437 Berlin",
+    "Husemannstraße 32, 10435 Berlin",
+    "Belforter Straße 21, 10405 Berlin",
+    "Greifenhagener Straße 65, 10437 Berlin",
+    "Greifswalder Straße 212, 10405 Berlin",
+    "Bornholmer Straße 72, 10439 Berlin"
+]
+
+default_selected_addresses = [
+    "Schliemannstraße 34, 10437 Berlin",
+    "Kastanienallee 82, 10435 Berlin",
+    "Helmholtzplatz 1, 10437 Berlin",
+    "Danziger Straße 136, 10407 Berlin",
+    "Kollwitzstraße 1, 10405 Berlin",
+    "Schönhauser Allee 6-7, 10119 Berlin",
+    "Knaackstraße 97, 10435 Berlin",
+    "Sredzkistraße 44, 10435 Berlin",
+]
+
 demo = gr.Interface(
     run_service,
     [
         gr.Number(value=2, label="Number of Couriers"),
-        gr.Dataframe(
-            label="Delivery Addresses",
-            headers=["Address"],
-            value=[
-                ["Alexanderplatz, Berlin, Germany"],
-                ["Brandenburg Gate, Berlin, Germany"],
-                ["Fernsehturm Berlin, Germany"],
-                ["Potsdamer Platz, Berlin, Germany"],
-                ["Reichstag building, Berlin, Germany"],
-                ["Berlin Wall Memorial, Germany"],
-                ["Checkpoint Charlie, Berlin, Germany"],
-                ["Kurfürstendamm, Berlin, Germany"],
-                ["Berlin Cathedral, Germany"],
-                ["Charlottenburg Palace, Berlin, Germany"]
-            ],
-            col_count=(1, "fixed"),
-            type="array",
-        ),
+        gr.CheckboxGroup(choices=address_choices, value=default_selected_addresses, label="Select Delivery Addresses:"),
     ],
     [
+        gr.Plot(label="Courier Routes on Map"),
         gr.Textbox(label="Courier Routes"),
-        gr.Plot(label="Courier Routes on Map")
-    ],
-    examples=[
-        [
-            2,
-            [
-                ["Alexanderplatz, Berlin, Germany"],
-                ["Brandenburg Gate, Berlin, Germany"],
-                ["Fernsehturm Berlin, Germany"],
-                ["Potsdamer Platz, Berlin, Germany"],
-                ["Reichstag building, Berlin, Germany"],
-                ["Berlin Wall Memorial, Germany"],
-                ["Checkpoint Charlie, Berlin, Germany"],
-                ["Kurfürstendamm, Berlin, Germany"],
-                ["Berlin Cathedral, Germany"],
-                ["Charlottenburg Palace, Berlin, Germany"]
-            ],
-        ],
     ],
     title=title,
     description=description,

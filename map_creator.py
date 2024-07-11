@@ -21,6 +21,9 @@ def create_map(routes, address_coordinates):
 
     fig = px.line_mapbox(data_frame, lat="lat", lon="lng", color="courier", hover_name="address_name", zoom=3, height=300)
 
-    fig.update_layout(mapbox_style="open-street-map", mapbox_zoom=10, mapbox_center_lat = 52.5200, mapbox_center_lon = 13.4050)
+    ## center of prenzlauer berg
+    prenzlauer_berg_lat = 52.5487
+    prenzlauer_berg_lng = 13.4319
+    fig.update_layout(mapbox_style="open-street-map", mapbox_zoom=10, mapbox_center_lat = prenzlauer_berg_lat, mapbox_center_lon = prenzlauer_berg_lng)
 
     return fig
