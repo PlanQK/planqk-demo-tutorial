@@ -5,7 +5,7 @@ import map_creator
 
 title = "Demo: Quantum Route Planning"
 description = """
-    This interactive demo uses the [Fleet Route Planning Service](https://platform.planqk.de/marketplace/apis/8c63c4ed-97cb-4496-a27d-cfc7330fd66c), to plan delivery routes for a given number of couriers in the Berlin district of Pankow. 
+    This interactive demo uses the [Fleet Route Planning Service](https://platform.planqk.de/marketplace/apis/8c63c4ed-97cb-4496-a27d-cfc7330fd66c) to plan delivery routes for a given number of couriers in the Berlin district of Pankow. 
     The routes are optimized to minimize the total distance traveled by the couriers while ensuring that each delivery address is visited exactly once.
     You can adjust the number of couriers and the delivery addresses to see how the routes change.
     """
