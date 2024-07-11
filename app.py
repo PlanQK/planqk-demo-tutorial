@@ -5,13 +5,10 @@ import map_creator
 
 title = "Demo: Quantum Route Planning"
 description = """
-    This demo shows how to use the PlanQK Platform to solve a simple quantum route planning problem. The problem 
-    is to find the shortest route between two points on a grid. The grid is represented by a graph, where each 
-    node is a point on the grid and each edge is a connection between two points. The graph is given as an 
-    adjacency matrix. The quantum algorithm is based on the Grover algorithm. The algorithm is implemented as a 
-    service on the PlanQK Platform. The demo uses the service to solve the route planning problem.
+    This interactive demo uses the [Fleet Route Planning Service](https://platform.planqk.de/marketplace/apis/8c63c4ed-97cb-4496-a27d-cfc7330fd66c),to plan routes for several couriers in the Berlin district of Pankow. 
+    The routes are optimized to minimize the total distance traveled by the couriers while ensuring that each delivery address is visited exactly once.
+    You can adjust the number of couriers and the delivery addresses to see how the routes change.
     """
-
 
 def run_service(number_couriers: int, delivery_addresses: list[str]):
     delivery_addresses_flattened = [item for sublist in delivery_addresses for item in sublist]
@@ -44,6 +41,12 @@ demo = gr.Interface(
                 ["Brandenburg Gate, Berlin, Germany"],
                 ["Fernsehturm Berlin, Germany"],
                 ["Potsdamer Platz, Berlin, Germany"],
+                ["Reichstag building, Berlin, Germany"],
+                ["Berlin Wall Memorial, Germany"],
+                ["Checkpoint Charlie, Berlin, Germany"],
+                ["Kurfürstendamm, Berlin, Germany"],
+                ["Berlin Cathedral, Germany"],
+                ["Charlottenburg Palace, Berlin, Germany"]
             ],
             col_count=(1, "fixed"),
             type="array",
@@ -51,7 +54,7 @@ demo = gr.Interface(
     ],
     [
         gr.Textbox(label="Courier Routes"),
-        gr.Plot()
+        gr.Plot(label="Courier Routes on Map")
     ],
     examples=[
         [
