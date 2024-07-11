@@ -1,5 +1,5 @@
 gradio
-matplotlib
-numpy
+plotly
 planqk-service-sdk
-networkx
+pandas
+requests
