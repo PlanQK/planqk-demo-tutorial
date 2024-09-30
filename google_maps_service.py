@@ -1,7 +1,9 @@
 import os
+
 import requests
 
 api_key = os.getenv("GCP_API_KEY")
+
 
 def get_distance(origin, destination):
     if not api_key:
@@ -25,16 +27,17 @@ def get_distance(origin, destination):
         else:
             return None, "No route found"
     else:
-        return None, "Error: " + response.status_code
+        return None, f"Error: {response.status_code}"
 
-
-## generate weights between each pair of addresses where the weight is the distance between the two addresses
 
 def get_address_distances_and_coordinates(addresses):
+    """
+    Generate weights between each pair of addresses where the weight is the distance between the two addresses
+    """
     weights = {}
     coordinates = {}
     for i in range(len(addresses)):
-        for j in range(i+1, len(addresses)):
+        for j in range(i + 1, len(addresses)):
             origin = addresses[i]
             destination = addresses[j]
             distance, origin_coordinates, destination_coordinates = get_distance(origin, destination)
@@ -46,6 +49,5 @@ def get_address_distances_and_coordinates(addresses):
                 coordinates[origin] = origin_coordinates
             if destination not in coordinates:
                 coordinates[destination] = destination_coordinates
-
 
     return weights, coordinates

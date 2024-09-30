@@ -1,5 +1,5 @@
 gradio
-plotly
-planqk-service-sdk
 pandas
+planqk-service-sdk
+plotly
 requests

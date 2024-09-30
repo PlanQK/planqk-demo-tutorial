@@ -1,9 +1,9 @@
-# gradio-mvp-demo
+# planqk-demo-tutorial
 
 Run it locally with:
 
 ```bash 
 conda env create -f environment.yml
-conda activate planqk-demo-fleet-route-planning
+conda planqk-demo-tutorial
 gradio app.py
 ```

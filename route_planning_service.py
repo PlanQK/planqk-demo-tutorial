@@ -1,24 +1,21 @@
 import os
+
 from planqk.service.client import PlanqkServiceClient
 
 consumer_key = os.getenv("CONSUMER_KEY", None)
 consumer_secret = os.getenv("CONSUMER_SECRET", None)
-service_endpoint = os.getenv(
-    "SERVICE_ENDPOINT",
-    "https://gateway.platform.planqk.de/anaqor/fleet-route-planning/1.0.0",
-)
+service_endpoint = os.getenv("SERVICE_ENDPOINT", "http://localhost:8081")
 
-def plan_routes(
-        number_couriers: int, address_distances: dict, addresses: list
-):
+
+def plan_routes(number_couriers: int, address_distances: dict, addresses: list):
     client = PlanqkServiceClient(service_endpoint, consumer_key, consumer_secret)
 
-    ## assign each address a number idenfier starting from 0
+    # assign each address a number identifier starting from 0
     address_id = {}
     for i, address in enumerate(addresses):
         address_id[address] = i
 
-    ## in address weights array, replace the address with the corresponding number identifier
+    ##in address weights array, replace the address with the corresponding number identifier
     weight_dict = {}
     for address_pair, weight in address_distances.items():
         address1 = address_pair[0]
@@ -42,7 +39,7 @@ def plan_routes(
     job_result = client.get_result(job.id)
 
     routes = []
-    ## convert the address number identifier back to the address
+    # convert the address number identifier back to the address
     for route in job_result["result"]["routes_list"]:
         route_nodes = route["route_nodes"]
         ## search the identifier in address_id it is the value
@@ -50,5 +47,3 @@ def plan_routes(
         routes.append(route_nodes)
 
     return routes
-
-

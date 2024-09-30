@@ -1,13 +1,22 @@
 import gradio as gr
-import google_maps_service
-import route_planning_service
-import map_creator
 
-title = "Demo: Quantum Route Planning"
+import google_maps_service
+import map_creator
+import route_planning_service
+
+title = "PlanQK Tutorial - Fleet Route Planning"
 description = """
-    This interactive demo uses the [Fleet Route Planning Service](https://platform.planqk.de/marketplace/apis/8c63c4ed-97cb-4496-a27d-cfc7330fd66c) to plan delivery routes for a given number of couriers in the Berlin district of Pankow. 
+    This demo implements a simple app to plan delivery routes for a given number of couriers in the Berlin district of Pankow. 
     The routes are optimized to minimize the total distance traveled by the couriers while ensuring that each delivery address is visited exactly once.
     You can adjust the number of couriers and the delivery addresses to see how the routes change.
+    
+    > The route planning service created by the PlanQK tutorial is used in this demo.
+    > Follow the tutorial to learn how to implement and create the respective service. 
+    > It also shows how you subscribe to the created service and how to use it in this demo.
+    
+    When you press the submit button, the demo converts the number of couriers and the selected delivery addresses into the respective input required by the service.
+    Consult the API documentation of the route planning service to understand the input and output of the service.
+    Once the service calculated the routes, the demo displays the routes on a map and lists the routes for each courier in a text box.  
     """
 
 
